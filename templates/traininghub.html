@@ -1,0 +1,255 @@
+<!--
+Bootstrap Classes Used:
+
+1. container: Centers the content with a maximum width.
+2. alert: Used to create alert messages.
+   - alert-info: Sets the background color to a light blue.
+   - alert-light: Sets the background color to light gray.
+   - alert-success: Sets the background color to green for success messages.
+   - alert-warning: Sets the background color to yellow for warnings.
+3. text-center: Centers the text horizontally.
+4. form-label: Styles the form labels.
+5. form-control: Styles the form input fields.
+6. mb-3: Adds bottom margin of 1rem (16px) for spacing.
+7. mb-4: Adds bottom margin of 1.5rem (24px) for spacing.
+8. mt-4: Adds top margin of 1.5rem (24px) for spacing.
+9. mt-5: Adds top margin of 3rem (48px) for spacing.
+10. justify-content-center: Centers the content horizontally within a flex container.
+11. row: Creates a horizontal group of columns.
+12. col-4: Defines column width of 4 units on all screen sizes.
+13. col-6: Defines column width of 6 units on all screen sizes.
+14. btn: Styles the button.
+15. btn-primary: Styles the button with primary color.
+16. bi-info-circle: Bootstrap Icons class for the info circle icon.
+17. text-left: Aligns text to the left.
+18. fw-bold: Sets font weight to bold.
+19. fs-5: Sets font size to 1.25rem (20px).
+20. text-muted: Styles text with a lighter color.
+21. py-3: Adds padding to the top and bottom of 1rem (16px).
+22. mb-1: Adds bottom margin of 0.25rem (4px).
+23. mb-0: Adds bottom margin of 0 (0px).
+24. mt-auto: Adds auto margin to the top.
+25. mt-2: Adds top margin of 0.5rem (8px).
+26. mx-auto: Centers the element horizontally with auto margins.
+27. border: Adds border to the element.
+28. navbar: Styles the navigation bar.
+29. navbar-expand-md: Expands the navbar on medium and larger screens.
+30. navbar-light: Sets the navbar text color to dark for light backgrounds.
+31. navbar-toggler: Styles the navbar toggler button.
+32. navbar-toggler-icon: Adds an icon to the navbar toggler button.
+33. navbar-collapse: Groups and hides navbar contents by default.
+34. nav: Styles the navigation list.
+35. nav-item: Styles individual navigation items.
+36. nav-link: Styles navigation links.
+37. me-auto: Adds margin to the end (right in LTR, left in RTL) of the element.
+38. ms-auto: Adds margin to the start (left in LTR, right in RTL) of the element.
+39. h-100: Sets the height of the element to 100%.
+40. d-flex: Displays the element as a flex container.
+41. justify-content-center: Centers the flex items horizontally.
+42. align-middle: Vertically centers the element.
+43. table: Styles the table.
+44. table-hover: Adds a hover effect to table rows.
+45. table-sm: Adds smaller spacing to table cells.
+46. table-bordered: Adds borders to all table cells.
+47. table-primary: Adds a primary color background to the table header and selected rows.
+48. legend-container: Custom class for legend styling.
+49. chart-container: Custom class for chart container styling.
+50. card: Styles the card element.
+51. compact-diet-card: Custom class for compact diet card styling.
+52. card-body: Styles the card body.
+53. card-title: Styles the card title.
+54. card-text: Styles the card text.
+55. list-unstyled: Removes default list styles (bullets and padding).
+56. text-small: Reduces text size.
+57. legend-box: Custom class for legend box styling.
+58. input-group: Groups multiple form controls into one line.
+59. tab-content: Styles the content within tabs.
+60. tab-pane: Styles individual tab panes.
+61. fade: Adds a fade transition effect to tab panes.
+62. show: Shows the element.
+63. active: Styles active elements (e.g., active tab).
+64. goals-tabs: Custom class for goals tab styling.
+65. nav-pills: Styles the navigation tabs with a pill-style look.
+66. custom-alert: Custom class for alert styling.
+67. custom-calorie-table: Custom class for calorie table styling.
+68. custom-table-width: Custom class for setting table width.
+-->
+
+{% extends "layout.html" %}
+
+{% block title %}
+{{ training_hub }}
+{% endblock %}
+
+
+{% block main %}
+<!-- Main heading for the Training Hub page -->
+<h1 class="mb-4 text-center">{{ training_hub }}</h1>
+
+<!-- Container with a maximum width of 800px to center the form and content -->
+<div class="container" style="max-width:800px; margin: 0 auto;">
+
+    <!-- Informational alert for user guidance -->
+    <div class="alert alert-info text-center" role="alert"
+        style="background-color:#198754; border-color:white; color:white; opacity:80%;">
+        <i class="bi-info-circle"></i> <br>
+        <small>
+            Enter your current bodyweight and your one-rep max (1RM) for the Squat, Bench Press, and Deadlift exercises.
+            <br><br>
+            This information will help determine your fitness level.
+            <br><br>
+            If you are unsure of your 1RM, we recommend visiting the gym to test it and then returning to input the
+            values.
+        </small>
+    </div>
+
+    <!-- Form for submitting bodyweight and 1RM values -->
+    <form method="POST" action="/traininghub">
+        <div class="row mb-3 justify-content-center">
+            <!-- Current Bodyweight input field -->
+            <div class="col-6 mb-3">
+                <label for="current_weight" class="form-label">Current Bodyweight<br>({% if unit_system == 'metric'
+                    %}kg{% elif unit_system == 'imperial' %}lb{% endif %})</label>
+                <input type="number" class="form-control" id="current_weight" name="current_weight"
+                    value="{{ current_weight }}" required step="0.1">
+            </div>
+        </div>
+        <div class="row mb-3 justify-content-center">
+            <!-- Squat 1RM input field -->
+            <div class="col-4 mb-3">
+                <label for="squat" class="form-label">Squat<br>({% if unit_system == 'metric' %}kg{% elif unit_system ==
+                    'imperial' %}lb{% endif %})</label>
+                <input type="number" class="form-control" id="squat" name="squat" required>
+            </div>
+            <!-- Bench Press 1RM input field -->
+            <div class="col-4 mb-3">
+                <label for="bench" class="form-label">Bench Press<br>({% if unit_system == 'metric' %}kg{% elif
+                    unit_system == 'imperial' %}lb{% endif %})</label>
+                <input type="number" class="form-control" id="bench" name="bench" required>
+            </div>
+            <!-- Deadlift 1RM input field -->
+            <div class="col-4 mb-3">
+                <label for="deadlift" class="form-label">Deadlift<br>({% if unit_system == 'metric' %}kg{% elif
+                    unit_system == 'imperial' %}lb{% endif %})</label>
+                <input type="number" class="form-control" id="deadlift" name="deadlift" required>
+            </div>
+        </div>
+        <!-- Submit button for the form -->
+        <button type="submit" class="btn btn-primary">Calculate Fitness Level</button>
+    </form>
+
+    {% if fitness_level %}
+    <!-- Display the calculated fitness level -->
+    <div class="mt-5">
+        <h2 class="alert alert-success text-center" role="alert">Your Fitness Level: {{ fitness_level|capitalize }}</h2>
+
+        <!-- Beginner Training Plan -->
+        {% if fitness_level == 'beginner' %}
+        <div class="alert alert-light" role="alert">
+            <h4>Beginner Training Plan</h4>
+            <p>Primarily use machines to get used to the movements and train safely. Complete body workout 3x a week.
+            </p>
+            <ul style="text-align: left;">
+                <li>Small warm-up</li>
+                <li>Chest: Machine Chest Press – 3 sets of 12-15 reps</li>
+                <li>Back: Lat Pulldown – 3 sets of 12-15 reps</li>
+                <li>Triceps: Tricep Pushdown – 3 sets of 12-15 reps</li>
+                <li>Biceps: Machine Bicep Curl – 3 sets of 12-15 reps</li>
+                <li>Shoulders: Machine Shoulder Press – 3 sets of 12-15 reps</li>
+                <li>Legs: Leg Press – 3 sets of 12-15 reps</li>
+            </ul>
+        </div>
+
+        <!-- Intermediate Training Plan -->
+        {% elif fitness_level == 'intermediate' %}
+        <div class="alert alert-light" role="alert">
+            <h4>Intermediate Training Plan</h4>
+            <p>Incorporate more free weights with a mix of machine exercises. Upper body/lower body split, 4x a week.
+            </p>
+            <h5>Upper Body:</h5>
+            <ul style="text-align: left;">
+                <li>Small warm-up</li>
+                <li>Chest: Bench Press – 5 sets of 5 reps or 4 sets of 8-12 reps</li>
+                <li>Back: Pull-Ups – 5 sets of 5 reps or 4 sets of 8-12 reps</li>
+                <li>Chest: Butterfly Machine – 3 sets of 8-12 reps</li>
+                <li>Back: T-Bar Rows – 3 sets of 8-12 reps</li>
+                <li>Triceps: Pushdowns Cable Tower – 3 sets of 8-12 reps</li>
+                <li>Biceps: Curls Cable Tower – 3 sets of 8-12 reps</li>
+                <li>Shoulders: Side Raises – 3 sets of 15-20 reps</li>
+                <li>Shoulders: Face Pulls Cable Tower – 3 sets of 15-20 reps</li>
+                <li>Optional: Add one free biceps/triceps exercise if time and body allows.</li>
+            </ul>
+            <h5>Lower Body:</h5>
+            <ul style="text-align: left;">
+                <li>Small warm-up</li>
+                <li>Legs: Deadlifts – 5 sets of 5 reps or 4 sets of 8-12 reps</li>
+                <li>Legs: Squats – 5 sets of 5 reps or 4 sets of 8-12 reps</li>
+                <li>Legs: Hip Thrusts – 3 sets of 8-12 reps</li>
+                <li>Leg Extensions – 3 sets of 8-12 reps</li>
+                <li>Leg Curls – 3 sets of 8-12 reps</li>
+                <li>Calves – 3 sets of 15-20 reps</li>
+                <li>Lower Back: Back Extensions – 3 sets of 8-12 reps</li>
+            </ul>
+        </div>
+
+        <!-- Advanced Training Plan -->
+        {% elif fitness_level == 'advanced' %}
+        <div class="alert alert-light" role="alert">
+            <h4>Advanced Training Plan</h4>
+            <p>Focus on compound movements with higher volume. Push/pull/legs split, 6x a week.</p>
+            <h5>Push:</h5>
+            <ul style="text-align: left;">
+                <li>Small warm-up</li>
+                <li>Chest: Bench Press – 4 sets of 8-12 reps</li>
+                <li>Shoulders: Overhead Press – 4 sets of 8-12 reps</li>
+                <li>Triceps: Dips – 4 sets of 8-12 reps</li>
+                <li>Chest: Incline Dumbbell Press – 4 sets of 8-12 reps</li>
+                <li>Shoulders: Lateral Raises – 4 sets of 15-20 reps</li>
+                <li>Triceps: Skull Crushers – 4 sets of 8-12 reps</li>
+            </ul>
+            <h5>Pull:</h5>
+            <ul style="text-align: left;">
+                <li>Small warm-up</li>
+                <li>Back: Pull-Ups – 4 sets of 8-12 reps</li>
+                <li>Back: Bent Over Rows – 4 sets of 8-12 reps</li>
+                <li>Back: Face Pulls – 4 sets of 15-20 reps</li>
+                <li>Biceps: Barbell Curls – 4 sets of 8-12 reps</li>
+                <li>Biceps: Hammer Curls – 4 sets of 8-12 reps</li>
+            </ul>
+            <h5>Legs:</h5>
+            <ul style="text-align: left;">
+                <li>Small warm-up</li>
+                <li>Legs: Deadlifts – 4 sets of 8-12 reps</li>
+                <li>Legs: Squats – 4 sets of 8-12 reps</li>
+                <li>Legs: Leg Press – 4 sets of 8-12 reps</li>
+                <li>Legs: Romanian Deadlifts – 4 sets of 8-12 reps</li>
+                <li>Leg Extensions – 4 sets of 8-12 reps</li>
+                <li>Leg Curls – 4 sets of 8-12 reps</li>
+                <li>Calves: Standing Calf Raises – 4 sets of 15-20 reps</li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Disclaimer section -->
+<div class="alert alert-warning mt-4" role="alert">
+    <h5 class="alert-heading">Important Disclaimer</h5>
+    <p>To achieve optimal results, it is crucial to maintain proper technique, consistent break times, and the same
+        conditions during each training session. Tracking your progress using a fitness diary app can be highly
+        beneficial. Aim to improve by at least one rep every training session.</p>
+    <p>If you reach your goal of, for example, 4 sets of 10 reps in one or two consecutive sessions, you should
+        increase the weight.</p>
+    <p>
+        Breaks for exercises in the rep ranges 8-12 should be 60-90 seconds long. Breaks for exercises in the range of 5
+        reps should be 90-150 secs long.
+    </p>
+    <p>These are example training plans proven effective across various athletes. Feel free to modify them according
+        to your preferences. You can also substitute exercises within the same muscle group if you prefer different
+        movements.</p>
+</div>
+
+</div>
+{% endif %}
+</div>
+{% endblock %}

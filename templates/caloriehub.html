@@ -1,0 +1,204 @@
+<!--
+Bootstrap Classes Used:
+1. row: Used for creating horizontal groups of columns.
+2. justify-content-center: Centers the content horizontally.
+3. col-12: Column spanning 12 units (full width) on all screen sizes.
+4. col-md-8: Column spanning 8 units on medium and larger screens.
+5. mt-3, mt-4, mb-3, mb-5: Margin utilities for spacing.
+6. alert, alert-info: Used for creating alert boxes.
+7. text-center: Centers the text horizontally.
+8. btn, btn-primary: Styles buttons.
+9. container: Centers the form with a maximum width.
+10. form-label: Styles labels.
+11. form-select: Styles select dropdowns.
+12. form-control: Styles input fields.
+13. input-group: Groups related form elements.
+14. small: Small text size.
+15. i: Inline elements for icons.
+-->
+
+{% extends "layout.html" %}
+
+{% block title %}
+{{ calorie_hub }}
+{% endblock %}
+
+{% block main %}
+<h1>{{ calorie_hub }}</h1>
+
+<!-- Informational Message -->
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 mt-3">
+        <div class="alert custom-alert" role="alert"
+            style="background-color:#198754; border-color:white; color:white; opacity:80%;">
+            <i class="bi-info-circle"></i> <br>
+            <small>
+                All fields are required except Body Fat %. However, providing Body Fat % can make estimates more
+                accurate.
+            </small>
+        </div>
+    </div>
+</div>
+
+<!-- Calculate with Account Values Button -->
+<div class="row mb-3 justify-content-center">
+    <div class="col-12 col-md-8 text-center">
+        <button class="btn btn-primary" onclick="prefillAccountValues()">Autofill Form with Account Values</button>
+    </div>
+</div>
+
+<!-- Form Container with Max Width -->
+<div class="container" style="max-width: 800px;">
+    <form action="/caloriehub_plans" method="post" id="calorie-form">
+        <!-- Unit System Selector -->
+        <div class="row mb-5 justify-content-center">
+            <div class="col-6">
+                <label for="unit_system" class="form-label">Unit System</label>
+                <select class="form-select" id="unit_system" name="unit_system" required onchange="changeUnits()">
+                    <option value="metric" {% if user_data.unit_system=='metric' %}selected{% endif %}>Metric (kg/cm)
+                    </option>
+                    <option value="imperial" {% if user_data.unit_system=='imperial' %}selected{% endif %}>Imperial
+                        (lb/ft/in)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Weight, Height, and Age Inputs -->
+        <div class="row mb-5">
+            <div class="col-4" id="weight_metric">
+                <label for="weight_kg" class="form-label">Weight (kg)</label>
+                <input type="number" class="form-control" id="weight_kg" name="weight_kg" step="0.1">
+            </div>
+            <div class="col-4" id="weight_imperial" style="display: none;">
+                <label for="weight_lb" class="form-label">Weight (lb)</label>
+                <input type="number" class="form-control" id="weight_lb" name="weight_lb" step="0.1">
+            </div>
+            <div class="col-4" id="height_metric">
+                <label for="height_cm" class="form-label">Height (cm)</label>
+                <input type="number" class="form-control" id="height_cm" name="height_cm">
+            </div>
+            <div class="col-4" id="height_imperial" style="display: none;">
+                <label for="height_ft" class="form-label">Height</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" id="height_ft" name="height_ft" placeholder="ft" min="1"
+                        max="8">
+                    <input type="number" class="form-control" id="height_in" name="height_in" placeholder="in" min="0"
+                        max="11">
+                </div>
+            </div>
+            <div class="col-4">
+                <label for="age" class="form-label">Age</label>
+                <input type="number" class="form-control" id="age" name="age" required>
+            </div>
+        </div>
+        <!-- Gender, Activity Level, and Body Fat Percentage Inputs -->
+        <div class="row mb-5">
+            <div class="col-4">
+                <label for="gender" class="form-label">Gender</label>
+                <select class="form-select" id="gender" name="gender" required>
+                    <option value="" selected disabled>Select your gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+            <div class="col-4">
+                <label for="activity_level" class="form-label">Activity Level</label>
+                <select class="form-select" id="activity_level" name="activity_level" required>
+                    <option value="" selected disabled>Select your activity level</option>
+                    <option value="sedentary">Little or no exercise (Sedentary)</option>
+                    <option value="light">Exercise/sports 1-3 days/week (Light)</option>
+                    <option value="moderate">Exercise/sports 3-5 days/week (Moderate)</option>
+                    <option value="active">Exercise/sports 6-7 days/week (Active)</option>
+                    <option value="very_active">Exercise/sports & physical job or 2x training/day (Very Active)</option>
+                </select>
+            </div>
+            <div class="col-4">
+                <label for="body_fat_percentage" class="form-label">Body Fat %</label>
+                <input type="number" class="form-control" id="body_fat_percentage" name="body_fat_percentage"
+                    placeholder="Optional" step="0.1">
+            </div>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Get Custom Diet Plan</button>
+    </form>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    // Function to prefill form values from user data
+    function prefillAccountValues() {
+        const userData = {{ user_data | tojson | safe
+    }};
+    console.log("User Data:", userData);  // Debugging: Log the user data
+
+    // Set the unit system and update the form accordingly
+    document.getElementById('unit_system').value = userData.unit_system;
+    changeUnits();  // Ensure the unit system change is reflected
+
+    // Prefill weight and height based on the unit system
+    if (userData.unit_system === 'metric') {
+        document.getElementById('weight_kg').value = userData.current_weight_kg;
+        document.getElementById('height_cm').value = userData.height_cm;
+    } else {
+        document.getElementById('weight_lb').value = (userData.current_weight_kg / 0.453592).toFixed(1);  // Round to nearest 0.1 lb
+        const heightInCm = userData.height_cm;
+        document.getElementById('height_ft').value = Math.floor(heightInCm / 30.48);
+        document.getElementById('height_in').value = Math.round((heightInCm % 30.48) / 2.54);  // Convert to int
+    }
+
+    // Prefill other form fields
+    document.getElementById('age').value = userData.age;
+    document.getElementById('gender').value = userData.gender;
+    document.getElementById('activity_level').value = userData.activity_level;
+    document.getElementById('body_fat_percentage').value = userData.body_fat_percentage || '';
+    }
+
+    // Function to change the form fields based on the selected unit system
+    function changeUnits() {
+        const unitSystem = document.getElementById('unit_system').value;
+        const weightMetric = document.getElementById('weight_metric');
+        const weightImperial = document.getElementById('weight_imperial');
+        const heightMetric = document.getElementById('height_metric');
+        const heightImperial = document.getElementById('height_imperial');
+
+        if (unitSystem === 'metric') {
+            // Show metric fields and hide imperial fields
+            weightMetric.style.display = 'block';
+            heightMetric.style.display = 'block';
+            weightImperial.style.display = 'none';
+            heightImperial.style.display = 'none';
+
+            // Set required attribute for metric fields
+            document.getElementById('weight_kg').required = true;
+            document.getElementById('height_cm').required = true;
+            // Remove required attribute from imperial fields
+            document.getElementById('weight_lb').required = false;
+            document.getElementById('height_ft').required = false;
+            document.getElementById('height_in').required = false;
+        } else {
+            // Show imperial fields and hide metric fields
+            weightMetric.style.display = 'none';
+            heightMetric.style.display = 'none';
+            weightImperial.style.display = 'block';
+            heightImperial.style.display = 'block';
+
+            // Set required attribute for imperial fields
+            document.getElementById('weight_lb').required = true;
+            document.getElementById('height_ft').required = true;
+            document.getElementById('height_in').required = true;
+            // Remove required attribute from metric fields
+            document.getElementById('weight_kg').required = false;
+            document.getElementById('height_cm').required = false;
+        }
+    }
+
+    // Ensure the correct fields are set on page load
+    document.addEventListener("DOMContentLoaded", function() {
+        changeUnits();
+    });
+</script>
+
+
+{% endblock %}

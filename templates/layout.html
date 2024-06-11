@@ -1,0 +1,131 @@
+<!--
+Bootstrap Classes Used:
+1. container-fluid: Provides a full-width container, spanning the entire width of the viewport.
+2. navbar: Defines a navigation bar.
+3. bg-light: Sets a light background color.
+4. border: Adds a border to the element.
+5. navbar-expand-md: Expands the navigation bar on medium and larger screens.
+6. navbar-light: Sets the color scheme for the navigation bar.
+7. navbar-brand: Defines the branding section of the navigation bar.
+8. navbar-toggler: Styles the toggle button for collapsing navigation items on small screens.
+9. navbar-toggler-icon: Adds a default icon for the toggle button.
+10. collapse: Collapses content within a parent container.
+11. navbar-collapse: Groups and hides the navigation bar contents by a parent breakpoint.
+12. navbar-nav: Styles the navigation links within the navigation bar.
+13. nav-item: Defines an item in the navigation bar.
+14. nav-link: Styles a link inside the navigation bar.
+15. me-auto: Aligns the navigation links to the left (margin-end auto).
+16. ms-auto: Aligns the navigation links to the right (margin-start auto).
+17. alert: Defines an alert box.
+18. alert-danger: Styles the alert box with a red background (indicating danger or error).
+19. mb-0: Removes the bottom margin.
+20. text-center: Centers the text within the element.
+21. container: Centers the content with a maximum width.
+22. py-5: Adds padding to the top and bottom of the element (5 units).
+23. mt-4: Adds a top margin of 4 units.
+24. mt-auto: Adds a top margin to push the footer to the bottom of the page.
+25. py-3: Adds padding to the top and bottom of the element (3 units).
+26. bg-light: Sets a light background color.
+27. small: Styles the text with a smaller font size.
+28. text-muted: Applies a muted color to the text.
+29. text-center: Centers the text within the element.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+            </script>
+        <!-- Custom CSS -->
+        <link href="/static/styles.css" rel="stylesheet">
+        <!-- Bootstrap Icons -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+        <!-- Favicon -->
+        <!-- <link href="/static/favicon.ico" rel="icon"> -->
+        <!-- Include Chart.js library -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <!-- Include Chart.js library -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <!-- Chart.js Date Adapter -->
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+        <title>{{ site_name }}: {% block title %}{% endblock %}</title>
+    </head>
+
+    <body>
+        <!-- Navigation bar -->
+        <nav class="bg-light border navbar navbar-expand-md navbar-light">
+            <div class="container-fluid">
+                <!-- Brand/logo -->
+                <a class="navbar-brand" href="/">
+                    <img src="/static/fithub_logo_transparent_500x200.png" alt="FitHub Logo" style="height: 50px;">
+                </a>
+                <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation"
+                    class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar">
+                    {% if session["user_id"] %}
+                    <!-- Left-aligned navigation links -->
+                    <ul class="navbar-nav me-auto mt-2">
+                        <li class="nav-item"><a class="nav-link" href="/home">{{ home }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/infohub">{{ info_hub }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/caloriehub">{{ calorie_hub }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/traininghub">{{ training_hub }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/progresshub"> {{ progress_hub}} </a></li>
+                        <li class="nav-item"><a class="nav-link" href="/settings"> {{ settings }} </a></li>
+                    </ul>
+                    <!-- Right-aligned navigation links -->
+                    <ul class="navbar-nav ms-auto mt-2">
+                        <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+                    </ul>
+                    {% else %}
+                    <!-- Right-aligned navigation links for guests -->
+                    <ul class="navbar-nav ms-auto mt-2">
+                        <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <header>
+            <div class="alert alert-primary mb-0 text-center" role="alert">
+                {% for category, message in messages %}
+                {{ message|safe }}<br>
+                {% endfor %}
+            </div>
+        </header>
+        {% endif %}
+        {% endwith %}
+
+        <!-- Main content -->
+        <main class="container py-5 text-center">
+            {% block main %}{% endblock %}
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-auto py-3 bg-light text-center">
+            <div class="container">
+                <p class="mb-1 small text-muted">&copy; 2024 {{ site_name }}</p>
+                <p class="mb-0 small text-muted">Designs provided by <a href="https://www.freepik.com//">FREEPIK</a></p>
+                <form action="https://validator.w3.org/check" class="text-center" enctype="multipart/form-data"
+                    method="post" target="_blank">
+                    <input name="doctype" type="hidden" value="HTML5">
+                    <input name="fragment" type="hidden">
+                </form>
+            </div>
+        </footer>
+    </body>
+
+</html>

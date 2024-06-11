@@ -1,0 +1,328 @@
+<!--
+Bootstrap Classes Used:
+1. alert: Defines an alert box.
+2. custom-alert: Custom class for additional styling of alerts.
+3. btn: Styles a button.
+4. mt-2: Adds a top margin of 2 units.
+5. mb-2: Adds a bottom margin of 2 units.
+6. text-center: Centers the text within the element.
+7. mb-4: Adds a bottom margin of 4 units.
+8. p-4: Adds padding of 4 units on all sides.
+9. mx-auto: Centers the element horizontally with automatic margins.
+10. border-end: Adds a border to the end side of the element.
+11. fs-4: Sets the font size to 4 (large).
+12. card: Defines a card element.
+13. table: Styles a table.
+14. table-hover: Adds hover effects to table rows.
+15. table-sm: Makes the table more compact.
+16. table-bordered: Adds borders to all table cells.
+17. table-primary: Adds a primary color to the table header and rows.
+18. align-middle: Vertically centers the content within the element.
+19. fw-bold: Sets the font weight to bold.
+20. fs-5: Sets the font size to 5 (medium).
+21. mt-4: Adds a top margin of 4 units.
+22. custom-table-width: Custom class for setting the table width.
+23. table-responsive: Makes the table responsive, allowing horizontal scrolling.
+24. nav: Styles navigation elements.
+25. nav-pills: Styles navigation elements as pills.
+26. justify-content-center: Centers the content horizontally.
+27. col-12: Defines a column that spans 12 units (full width) on all screen sizes.
+28. col-lg-4: Defines a column that spans 4 units on large screens.
+29. d-flex: Applies flexbox display to the element.
+30. mb-2: Adds a bottom margin of 2 units.
+31. fade: Adds a fade transition effect.
+32. show: Displays the element.
+33. active: Styles the element as active.
+34. alert-info: Adds an info color to the alert box.
+35. mb-3: Adds a bottom margin of 3 units.
+36. row: Defines a horizontal group of columns.
+37. col-lg-4: Defines a column that spans 4 units on large screens.
+38. col-md-12: Defines a column that spans 12 units on medium screens and smaller.
+39. mb-3: Adds a bottom margin of 3 units.
+40. h-100: Sets the height of the element to 100%.
+41. card-body: Styles the body of the card.
+42. card-title: Styles the title of the card.
+43. card-text: Styles the text within the card.
+44. chart-container: Custom class for styling the chart container.
+45. legend-container: Custom class for styling the legend container.
+46. list-unstyled: Removes the default list styling.
+47. text-small: Applies a smaller font size to the text.
+48. compact-diet-card: Custom class for additional styling of diet cards.
+49. py-5: Adds padding of 5 units to the top and bottom.
+50. mt-auto: Adds a top margin to push the footer to the bottom of the page.
+51. py-3: Adds padding of 3 units to the top and bottom.
+52. bg-light: Sets a light background color.
+53. small: Applies a smaller font size to the text.
+54. text-muted: Applies a muted color to the text.
+-->
+{% extends "layout.html" %}
+
+{% block title %}
+{{ calorie_hub }}
+{% endblock %}
+
+{% block main %}
+<h1 class="mb-4 text-center">Calorie Hub</h1>
+
+<!-- User Input Information -->
+<div class="alert custom-alert" role="alert">
+    {% if user_data.unit_system == 'metric' %}
+    <small>
+        The calculations are based on the metrics you provided: <b><u>{{ user_data.weight_kg }} kg</u></b>, <b><u>{{
+                user_data.height_cm }} cm</u></b>, <b><u>{{ user_data.age }} years</u></b>, <b><u>{{ user_data.gender
+                }}</u></b>, and activity level: <b><u>{{ user_data.activity_level_description }} ({{
+                user_data.activity_level }})</u></b>.
+        <br>
+        Provided the wrong information? <br> Simply click the button below to return and provide the information again.
+    </small>
+    {% endif %}
+    {% if user_data.unit_system == 'imperial' %}
+    <small>
+        The calculations are based on the metrics you provided: <b><u>{{ user_data.weight_lb }} lb</u></b>, <b><u>{{
+                user_data.height_ft }} ft {{ user_data.height_in }} in</u></b>, <b><u>{{ user_data.age }} years</u></b>,
+        <b><u>{{ user_data.gender }}</u></b>, and activity level: <b><u>{{ user_data.activity_level_description }} ({{
+                user_data.activity_level }})</u></b>.
+        <br>
+        Provided the wrong information? <br> Simply click the button below to return and provide the information again.
+    </small>
+    {% endif %}
+</div>
+<a href="/caloriehub" class="btn mt-2 mb-2">Return to Form</a>
+</button>
+
+<!-- Calorie usage per day / week Display -->
+<div class="text-center mb-4">
+    <h2 class="mb-3 mt-3">Your Calorie Range</h2>
+    <div class="card calorie-day-week-card p-4 mx-auto">
+        <div class="row">
+            <div class="col-6 border-end">
+                <!-- fs-4 = font-size 4 from bootstrap -->
+                <p class="fs-4"><strong>{{ tdee }}<br>calories</strong></p>
+                <p>per day</p>
+            </div>
+            <div class="col-6">
+                <p class="fs-4"><strong>{{ tdee * 7 }}<br>calories</strong></p>
+                <p>per week</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Explanation -->
+<div class="alert custom-alert" role="alert">
+    <i class="bi-info-circle"></i> <br>
+    <small>
+        The calculated calorie value is an estimate of your daily energy expenditure, which varies based on your
+        activity level.<br>Adjust accordingly to meet your goals.
+        <br>It does make sense to increase your activity level if you want to lose weight faster for example.
+    </small>
+</div>
+
+<!-- Calorie Range Table for Different Activity Levels -->
+<div class="calorie-table mt-4 custom-table-width">
+    <h3 class="text-center mb-3">Calorie Range by Activity Level</h3>
+    <div class="table-responsive custom-calorie-table">
+        <table class="table table-hover table-sm table-bordered text-center">
+            <!-- for the love of god, i could not change the colour of the table header
+            and the active row that matches the activity level
+            tried everything from css with important to own classes to inline styling
+            nothing worked, so we go with what we have here now with "table-primary"
+            even tho its not what i really want... -->
+            <thead class="table-primary">
+                <tr>
+                    <th>Activity Level</th>
+                    <th>Calorie Range (cal/day)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Base Metabolic Rate (BMR)</td>
+                    <td>{{ bmr }} cal/day</td>
+                </tr>
+                {% for level, data in tdee_activity_levels.items() %}
+                <tr class="{% if level == user_data.activity_level %}table-primary{% endif %}">
+                    <td class="align-middle {% if level == user_data.activity_level %}fw-bold fs-5{% endif %}">{{
+                        data.description }}</td>
+                    <td class="align-middle {% if level == user_data.activity_level %}fw-bold fs-5{% endif %}">{{
+                        data.calories }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Container for Tabs -->
+<div class="container">
+    <h2 class="text-center">Diet Plans</h2>
+    <!-- Tabs for Different Goals -->
+    <div class="goals-tabs">
+        <div class="row">
+            <ul class="nav nav-pills justify-content-center" id="pills-tab" role="tablist">
+                {% for diet in diets %}
+                <li class="nav-item col-12 col-lg-4 d-flex justify-content-center" role="presentation">
+                    <button class="nav-link btn mb-2 {% if loop.first %}active{% endif %}" id="{{ diet.id }}-tab"
+                        data-bs-toggle="pill" data-bs-target="#{{ diet.id }}" type="button" role="tab"
+                        aria-controls="{{ diet.id }}" aria-selected="{% if loop.first %}true{% else %}false{% endif %}">
+                        {{ diet.name }}
+                    </button>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="tab-content" id="pills-tabContent">
+        {% for diet in diets %}
+        <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="{{ diet.id }}" role="tabpanel"
+            aria-labelledby="{{ diet.id }}-tab">
+            <div class="container">
+                <h2 class="text-center pb-2">{{ diet.title }}</h2>
+                <!-- User Input Information -->
+                <div class="alert alert-info custom-alert mb-3" role="alert">
+                    <i class="bi-info-circle"></i> <br>
+                    <small>
+                        <!-- safe filter in jinja renders html tags correctly. this is helpful to render line breaks i'm passing from the list of dictionaries as "<br>" -->
+                        {{ diet.description | safe }}
+                    </small>
+                </div>
+                <div class="row">
+                    <!-- Sections for Each Diet Plan -->
+                    <div class="col-lg-4 col-md-12 mb-3">
+                        <div class="card compact-diet-card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">Smart FitHub Diet</h5>
+                                <p class="card-text text-center">30% protein, 70% carbs or fat</p>
+                                <div class="chart-container d-flex justify-content-center"
+                                    style="height:75px; width:75px;">
+                                    <canvas id="{{ diet.id }}SmartFitHubChart"></canvas>
+                                </div>
+                                <div class="legend-container">
+                                    <span class="legend-box protein"></span> Protein
+                                    <span class="legend-box carbs-or-fat"></span> Carbs or Fat
+                                </div>
+                                <ul class="list-unstyled text-small text-center">
+                                    <li><b>Protein:</b> {{ ((tdee + diet.calorie_adjustment) * 0.3) | round | int }}
+                                        cal ({{ (((tdee + diet.calorie_adjustment) * 0.3) / 4) | round | int }}g)
+                                    </li>
+                                    <li><b>Carbs or Fat:</b> {{ ((tdee + diet.calorie_adjustment) * 0.7) | round |
+                                        int }} cal</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12 mb-3">
+                        <div class="card compact-diet-card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">Low Carb Diet</h5>
+                                <p class="card-text text-center">30% protein, 25% carbs, 45% fat</p>
+                                <div class="chart-container d-flex justify-content-center"
+                                    style="height:75px; width:75px;">
+                                    <canvas id="{{ diet.id }}LowCarbChart"></canvas>
+                                </div>
+                                <div class="legend-container">
+                                    <span class="legend-box protein"></span> Protein
+                                    <span class="legend-box carbs"></span> Carbs
+                                    <span class="legend-box fat"></span> Fat
+                                </div>
+                                <ul class="list-unstyled text-small text-center">
+                                    <li><b>Protein:</b> {{ ((tdee + diet.calorie_adjustment) * 0.3) | round | int }}
+                                        cal ({{ (((tdee + diet.calorie_adjustment) * 0.3) / 4) | round | int }}g)
+                                    </li>
+                                    <li><b>Carbs:</b> {{ ((tdee + diet.calorie_adjustment) * 0.25) | round | int }}
+                                        cal ({{ (((tdee + diet.calorie_adjustment) * 0.25) / 4) | round | int }}g)
+                                    </li>
+                                    <li><b>Fat:</b> {{ ((tdee + diet.calorie_adjustment) * 0.45) | round | int }} cal
+                                        ({{ (((tdee + diet.calorie_adjustment) * 0.45) / 9) | round | int }}g)</li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12 mb-3">
+                        <div class="card compact-diet-card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">Low Fat Diet</h5>
+                                <p class="card-text text-center">30% protein, 50% carbs, 20% fat</p>
+                                <div class="chart-container d-flex justify-content-center"
+                                    style="height:75px; width:75px;">
+                                    <canvas id="{{ diet.id }}LowFatChart"></canvas>
+                                </div>
+                                <div class="legend-container">
+                                    <span class="legend-box protein"></span> Protein
+                                    <span class="legend-box carbs"></span> Carbs
+                                    <span class="legend-box fat"></span> Fat
+                                </div>
+                                <ul class="list-unstyled text-small text-center">
+                                    <li><b>Protein:</b> {{ ((tdee + diet.calorie_adjustment) * 0.3) | round | int }}
+                                        cal ({{ (((tdee + diet.calorie_adjustment) * 0.3) / 4) | round | int }}g)
+                                    </li>
+                                    <li><b>Carbs:</b> {{ ((tdee + diet.calorie_adjustment) * 0.5) | round | int }}
+                                        cal ({{ (((tdee + diet.calorie_adjustment) * 0.5) / 4) | round | int }}g)
+                                    </li>
+                                    <li><b>Fat:</b> {{ ((tdee + diet.calorie_adjustment) * 0.2) | round | int }} cal
+                                        ({{ (((tdee + diet.calorie_adjustment) * 0.2) / 9) | round | int }}g)</li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    // Function to create a pie chart using Chart.js
+    function createPieChart(ctx, data, labels, backgroundColors) {
+        new Chart(ctx, {
+            type: 'pie', // Type of chart
+            data: {
+                datasets: [{
+                    data: data, // Data values for the chart
+                    backgroundColor: backgroundColors // Background colors for each segment
+                }],
+                labels: labels // Labels for each segment
+            },
+            options: {
+                responsive: true, // Make the chart responsive
+                plugins: {
+                    legend: {
+                        display: false // Hide the legend
+                    },
+                    tooltip: {
+                        enabled: false // Disable tooltips
+                    }
+                }
+            }
+        });
+    }
+
+    // Wait for the DOM to fully load before executing the script
+    document.addEventListener('DOMContentLoaded', function() {
+        // Loop through each diet and create pie charts for each
+        {% for diet in diets %}
+        createPieChart(
+            document.getElementById('{{ diet.id }}SmartFitHubChart').getContext('2d'), // Context of the canvas element
+            [30, 70], // Data for the chart
+            ['Protein', 'Carbs or Fat'], // Labels for the chart
+            ['#007bff', '#e83e8c'] // Background colors for each segment
+        );
+        createPieChart(
+            document.getElementById('{{ diet.id }}LowCarbChart').getContext('2d'), // Context of the canvas element
+            [30, 25, 45], // Data for the chart
+            ['Protein', 'Carbs', 'Fat'], // Labels for the chart
+            ['#007bff', '#ffc107', '#28a745'] // Background colors for each segment
+        );
+        createPieChart(
+            document.getElementById('{{ diet.id }}LowFatChart').getContext('2d'), // Context of the canvas element
+            [30, 50, 20], // Data for the chart
+            ['Protein', 'Carbs', 'Fat'], // Labels for the chart
+            ['#007bff', '#ffc107', '#28a745'] // Background colors for each segment
+        );
+        {% endfor %}
+    });
+</script>
+
+{% endblock %}

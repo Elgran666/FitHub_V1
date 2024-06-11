@@ -1,0 +1,543 @@
+/* GENERAL CSS */
+/* GENERAL CSS */
+/* GENERAL CSS */
+/* GENERAL CSS */
+/* GENERAL CSS */
+
+
+
+/* Color Scheme Definitions */
+:root {
+    /* Strong blue */
+    --primary-color: #0d6efd;
+    /* strong green */
+    --secondary-color: #198754;
+    /* light grey */
+    --background-color: #f8f9fa;
+    --width-alerts-and-more: 600px;
+}
+
+/* colour definitions for FitHub text */
+.fit {
+    /* Using primary color */
+    color: var(--primary-color);
+}
+
+.hub {
+    /* Using secondary color */
+    color: var(--secondary-color);
+}
+
+/* Navigation and Footer Styling */
+.navbar,
+.footer {
+    color: white;
+}
+
+
+/* Adjusts top margin for the main container if necessary */
+.container {
+    /* Ensures no extra space above the container */
+    margin-top: 0 !important;
+    /* Reduces padding at the top of the container to 10px */
+    padding-top: 10px !important;
+}
+
+
+
+/* Link and Button Styling */
+.btn {
+    background-color: var(--primary-color) !important;
+    /* Using primary color */
+    color: white !important;
+    /* font color */
+    transition: background-color 0.3s !important;
+    /* Smooth transition for hover effects */
+    border-radius: 20px !important;
+    min-width: 200px !important;
+}
+
+@media (max-width: 768px) {
+    .btn {
+        /* Using primary color */
+        background-color: var(--primary-color) !important;
+        color: white !important;
+        /* font color */
+        /* Smooth transition for hover effects */
+        transition: background-color 0.3s !important;
+        border-radius: 20px !important;
+        min-width: 250px !important;
+    }
+
+    .btn:active {
+        background-color: var(--secondary-color) !important;
+        border-color: var(--secondary-color) !important;
+        /* font color */
+        color: white !important;
+        /* Smooth transition for hover effects */
+        transition: background-color 0.3s !important;
+    }
+}
+
+.btn:hover,
+.btn:active {
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+    /* font color */
+    color: white !important;
+    /* Smooth transition for hover effects */
+    transition: background-color 0.3s !important;
+}
+
+/* Active button styling to indicate the current tab */
+.btn.active {
+    /* Green color for active tab */
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+    color: white !important;
+}
+
+
+/* Base Typography Settings */
+body {
+    /* Primary font for body text */
+    font-family: 'Arial', sans-serif;
+}
+
+h1,
+h2,
+h3 {
+    /* Secondary font for headings */
+    font-family: 'Helvetica', sans-serif;
+    font-weight: bold;
+}
+
+/* Heading Font Size Adjustments */
+h1 {
+    /* Default font size for h1 on larger screens */
+    font-size: 2.5rem;
+}
+
+
+
+/* Custom alert styling */
+.custom-alert {
+    max-width: var(--width-alerts-and-more);
+    /* Centers the alert horizontally */
+    margin: 0 auto;
+    margin-bottom: 20px;
+    background-color: var(--secondary-color);
+    opacity: 80%;
+    border-color: white;
+    color: white;
+    padding: 10px;
+    text:center:
+
+}
+
+/* Ensure small text inside the alert is styled properly */
+.custom-alert small {
+    color: white;
+}
+
+
+/* Center-align the dropdown menus and ensure consistent styling
+    - login,
+    - signup,
+    - caloriehub
+    - etc)
+*/
+.form-select {
+    text-align: center;
+    /* Align the selected text in the center for Chrome, Edge, and Opera */
+    text-align-last: center;
+}
+
+/* Center-align input text and placeholder text */
+.form-control {
+    text-align: center;
+}
+
+.form-control::placeholder {
+    text-align: center;
+}
+
+
+
+
+/* LOGIN PAGE CSS */
+/* LOGIN PAGE CSS */
+/* LOGIN PAGE CSS */
+/* LOGIN PAGE CSS */
+/* LOGIN PAGE CSS */
+
+
+
+
+.custom-logo-size {
+    /* Ensures it never goes beyond its container's width */
+    max-width: 100%;
+    /* Keeps original aspect ratio */
+    width: auto;
+    /* Keeps original aspect ratio */
+    height: auto;
+}
+
+@media (max-width: 768px) {
+
+    /* Adjusting for tablets and mobile devices */
+    .custom-logo-size {
+        /* Limits the size on smaller devices */
+        max-width: 300px;
+    }
+}
+
+
+/* bootstrap logos */
+.bi {
+    color: #0d6efd;
+    /* Example: changing the icon color */
+    font-size: 3rem;
+    /* Example: changing the icon size */
+}
+
+
+
+/* HOMEPAGE CSS */
+/* HOMEPAGE CSS */
+/* HOMEPAGE CSS */
+/* HOMEPAGE CSS */
+/* HOMEPAGE CSS */
+
+
+
+.info-card,
+.card {
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 0.5rem;
+    color: black;
+}
+
+
+.card-width-homepage {
+    /* Ensure that --width-alerts-and-more is defined somewhere in your CSS */
+    max-width: var(--width-alerts-and-more) !important;
+    /* Center the card horizontally */
+    margin: 0 auto !important;
+}
+
+
+.info-card:hover,
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background-color);
+    border-radius: 0.5rem;
+
+
+
+}
+
+.card-title {
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.card-text {
+    font-size: 1rem;
+}
+
+
+
+/* HERO SECTION CSS */
+/* HERO SECTION CSS */
+/* HERO SECTION CSS */
+/* HERO SECTION CSS */
+/* HERO SECTION CSS */
+
+
+
+.hero-image {
+    width: 100%;
+    height: auto;
+    opacity: 0.8;
+}
+
+.hero-text {
+    text-align: center;
+    padding: 1rem;
+}
+
+.bordered-section {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 1rem;
+    background-color: var(--background-color);
+}
+
+/* Responsive Design Adjustments */
+@media (max-width: 768px) {
+    .hero-text {
+        /* font-size: smaller; */
+        width: 100%;
+    }
+}
+
+
+
+/* INFO HUB CSS */
+/* INFO HUB CSS */
+/* INFO HUB CSS */
+/* INFO HUB CSS */
+/* INFO HUB CSS */
+
+
+
+@media (min-width: 992px) {
+
+    /* Min size for large screens */
+    .infohub-card {
+        min-height: 375px;
+    }
+
+    /* grows the size of the "p" element to the 400px we specified above
+        chose the "p" i.e. paragraph element, since it's abvoe the button
+        that way everything is on the same height, and looks aligend
+        even though the button now is a bit far down */
+    .infohub-card p {
+        flex-grow: 1;
+    }
+}
+
+.infohub-modal-text {
+    text-align: left;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-bottom: 20px;
+}
+
+.infohub-modal-header {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+
+
+/* CALORIEHUB CSS */
+/* CALORIEHUB CSS */
+/* CALORIEHUB CSS */
+/* CALORIEHUB CSS */
+/* CALORIEHUB CSS */
+
+
+/* Custom card styling for the calorie range display */
+.calorie-day-week-card {
+    max-width: var(--width-alerts-and-more);
+    background-color: var(--primary-color);
+    opacity: 100%;
+    border-color: black;
+}
+
+/* Additional styling for text inside the card */
+.calorie-day-week-card p {
+    color: white;
+}
+
+.custom-table-width {
+    /* Set the maximum width of the table */
+    max-width: var(--width-alerts-and-more);
+    /* Center the table horizontally */
+    margin: 0 auto;
+}
+
+
+
+/* Compact Diet Card Styling */
+.compact-diet-card {
+    max-width: var(--width-alerts-and-more);
+    /* Center the table horizontally */
+    margin: 0 auto;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 0.5rem;
+    background-color: var(--light-background);
+    /* Eliminates default padding */
+    color: black;
+    padding: 0;
+}
+
+.compact-diet-card .card-body {
+    /* Tightens up internal spacing */
+    padding: 5px;
+}
+
+.compact-diet-card .card-title {
+    /* Reduces space below the card title */
+    margin-bottom: 3px;
+}
+
+.compact-diet-card .card-text {
+    /* Reduces space below the card text */
+    margin-bottom: 3px;
+}
+
+.compact-diet-card ul {
+    /* Aligns list items without padding */
+    padding-left: 0px;
+    /* Tightens up space below list */
+    margin-bottom: 0px;
+    /* Allows the list to expand and push footer down */
+    flex-grow: 1;
+}
+
+
+.legend-container {
+    text-align: center;
+    margin-top: 5px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    /* Light gray background similar to Bootstrap's light backgrounds */
+    background-color: #f8f9fa;
+    /* Bootstrap's secondary text color for lighter text */
+    color: #6c757d;
+    text-align: center;
+}
+
+.legend-box {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+    border-radius: 2px;
+    /* Ensures alignment is centered vertically with the text */
+    vertical-align: middle;
+    /* Initially transparent, will be set in HTML */
+    background-color: transparent;
+}
+
+
+
+.legend-box.protein {
+    /* Blue for protein */
+    background-color: #007bff;
+}
+
+.legend-box.carbs {
+    /* Yellow for carbs */
+    background-color: #ffc107;
+}
+
+.legend-box.fat {
+    /* Green for fat */
+    background-color: #28a745;
+}
+
+.legend-box.carbs-or-fat {
+    /* Pink for carbs or fat */
+    background-color: #e83e8c;
+}
+
+
+
+/* PROGRESS HUB CSS */
+/* PROGRESS HUB CSS */
+/* PROGRESS HUB CSS */
+/* PROGRESS HUB CSS */
+/* PROGRESS HUB CSS */
+
+
+
+.chart-container {
+    width: 100%;
+    height: 100%;
+}
+
+@media (max-width: 576px) {
+    .chart-container {
+        width: 100%;
+        /* Adjust as needed for smaller screens */
+        height: 300px;
+    }
+}
+
+
+/* Link and Button Styling */
+.btn-edit-delete {
+    /* Using primary color */
+    background-color: var(--primary-color) !important;
+    /* font color */
+    color: white !important;
+    /* Smooth transition for hover effects */
+    transition: background-color 0.3s !important;
+    border-radius: 20px !important;
+    min-width: 100px !important;
+    border: none;
+    margin-bottom: 5px;
+}
+
+@media (max-width: 768px) {
+    .btn-edit-delete {
+        /* Using primary color */
+        background-color: var(--primary-color) !important;
+        /* font color */
+        color: white !important;
+        /* Smooth transition for hover effects */
+        transition: background-color 0.3s !important;
+        border-radius: 20px !important;
+        min-width: 100px !important;
+        border: none;
+        margin-bottom: 5px;
+    }
+
+    .btn-edit-delete:active {
+        background-color: var(--secondary-color) !important;
+        border-color: var(--secondary-color) !important;
+        /* font color */
+        color: white !important;
+        /* Smooth transition for hover effects */
+        transition: background-color 0.3s !important;
+    }
+}
+
+.btn-edit-delete:hover,
+.btn-edit-delete:active {
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+    /* font color */
+    color: white !important;
+    /* Smooth transition for hover effects */
+    transition: background-color 0.3s !important;
+}
+
+/* Active button styling to indicate the current tab */
+.btn-edit-delete.active {
+    /* Green color for active tab */
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+    color: white !important;
+}
+
+
+.custom-form-width {
+    /* Set the maximum width of the form */
+    max-width: var(--width-alerts-and-more);
+    /* Center the form horizontally */
+    margin: 0 auto;
+}
+
+.custom-chart-width {
+    /* Set the maximum width of the chart */
+    max-width: var(--width-alerts-and-more);
+    /* Center the chart horizontally */
+    margin: 0 auto;
+}

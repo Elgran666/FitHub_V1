@@ -1,0 +1,140 @@
+<!--
+Bootstrap Classes Used:
+
+- container: Provides a responsive fixed-width container.
+- max-width: 800px; margin: 0 auto;: Centers the container and limits its maximum width.
+- jumbotron: A lightweight, flexible component that can optionally extend the entire viewport to showcase key marketing messages on your site.
+- text-center: Centers the text horizontally within the container.
+- display-4: A larger, more prominent font size for headings.
+- bordered-section: Custom class, assumed to add borders or padding (needs to be defined in CSS).
+- row: Creates a horizontal group of columns.
+- align-items-center: Vertically aligns the items within the row.
+- col-12: Spans all 12 columns of the grid on extra small to small screens (less than 768px).
+- col-md-6: Spans 6 columns of the grid on medium to extra-large screens (768px and wider).
+- text-center: Centers the text horizontally within the column.
+- mb-4: Adds a bottom margin of 4 units.
+- mb-md-0: Removes bottom margin on medium to extra-large screens.
+- img-fluid: Makes the image responsive, scaling with its parent element.
+- hero-image: Custom class for styling the image (needs to be defined in CSS).
+- hero-text: Custom class for styling the text (needs to be defined in CSS).
+- col-12: Spans all 12 columns of the grid on extra small to small screens.
+- col-md-10: Spans 10 columns of the grid on medium to extra-large screens.
+- mx-auto: Centers the column within its row by automatically setting left and right margins to 'auto'.
+- card: A Bootstrap card component.
+- mt-3: Adds a top margin of 3 units.
+- card-body: Provides padding around the content inside the card.
+- card-title: Styles the title within the card.
+- card-text: Styles the text within the card.
+- btn: Applies Bootstrap button styles.
+- btn-primary: Applies primary button styles (typically blue).
+-->
+{% extends "layout.html" %}
+
+{% block title %}
+{{ home }}
+{% endblock %}
+
+{% block main %}
+
+<div class="container" style="max-width: 800px; margin: 0 auto;">
+    <div class="jumbotron text-center">
+        <h1 class="display-4">Welcome to <span class="fit">Fit</span><span class="hub">Hub</span>!</h1>
+        <p class="lead"><u>Your ultimate fitness companion.</u></p>
+    </div>
+
+    <div class="bordered-section">
+        <div class="row align-items-center">
+            <div class="col-12 col-md-6 text-center mb-4 mb-md-0">
+                <!-- img-fluid: Makes the image responsive, hero-image: Custom class for styling the image -->
+                <img src="static/home_above_the_fold_image.jpg" alt="FitHub Image" class="img-fluid hero-image">
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="hero-text">
+                    <p><b>Explore our sub-hubs to achieve your fitness goals!</b></p>
+                    <!-- List of sub-hubs with brief descriptions -->
+                    <ul style="text-align: left; font-size: smaller;">
+                        <li style="margin-bottom: 5px;"><b>InfoHub:</b> Essential tips and nutritional guidance for a fitter, better you.</li>
+                        <li style="margin-bottom: 5px;"><b>CalorieHub:</b> Find out how many calories you need based on your goals.</li>
+                        <li style="margin-bottom: 5px;"><b>TrainingHub:</b> Personalized training plans tailored to your fitness level.</li>
+                        <li style="margin-bottom: 5px;"><b>ProgressHub:</b> Track your weight and workout progress over time.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <!--
+        "col-12": This class applies to extra small to small screens (less than 768px). It makes the element span all 12 columns of the grid, ensuring it takes up the full width of its container on smaller devices for optimal use of space.
+
+        "col-md-10": Starting from medium devices (768px and wider), this class reduces the element's width to occupy only 10 out of the 12 columns of the Bootstrap grid. This adjustment helps in creating a more focused and readable layout on larger screens by not stretching the content too wide.
+
+        "mx-auto": This utility centers the element horizontally within its row by automatically setting the left and right margins to 'auto'. This centering only takes effect when the element's width is less than the full width of the row (which happens when 'col-md-10' is active on medium and larger screens).
+
+        Together, these classes make the element responsive, ensuring full width on smaller screens for accessibility and better space usage, while centering and narrowing the layout on larger screens for improved aesthetics and readability.
+        -->
+    <div class="col-12 col-md-10 mx-auto">
+        <div class="card mt-3"> <!-- bootstrap: mt-3 = margin top 3 bootstrap class -->
+            <div class="card-body ">
+                <h5 class="card-title">{{ info_hub }}</h5>
+                <p class="card-text">Learn about nutrition, exercise, and how to optimize your fitness
+                    journey.<br><br>
+                    Access articles and guides to help you make informed decisions.</p>
+                <a href="/infohub" class="btn btn-primary">Explore {{ info_hub }} 👉</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-md-10 mx-auto">
+        <!-- col-12 for maximum width on small screens, col-md-10 for 10 columns width on medium and above screens -->
+        <!-- bootstrap: col-10 = column width 10, mx-auto = margin on x axis automatically i.e. center it-->
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ calorie_hub }}</h5>
+                <p class="card-text">Calculate your daily calorie needs to lose, maintain, or gain weight.<br><br>
+                    Get personalized recommendations based on your goals.</p>
+                <a href="/caloriehub" class="btn btn-primary">Explore {{ calorie_hub }} 👉</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-md-10 mx-auto">
+        <!-- col-12 for maximum width on small screens, col-md-10 for 10 columns width on medium and above screens -->
+        <!-- bootstrap: col-10 = column width 10, mx-auto = margin on x axis automatically i.e. center it-->
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ training_hub }}</h5>
+                <p class="card-text">Create a custom training plan based on your current fitness level and strength
+                    metrics.<br><br>
+                    Achieve your fitness goals with a tailored plan.</p>
+                <a href="/traininghub" class="btn btn-primary">Explore {{ training_hub }} 👉</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-md-10 mx-auto">
+        <!-- col-12 for maximum width on small screens, col-md-10 for 10 columns width on medium and above screens -->
+        <!-- bootstrap: col-10 = column width 10, mx-auto = margin on x axis automatically i.e. center it-->
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ progress_hub }}</h5>
+                <p class="card-text">Track your weight progress over time.<br><br>
+                    Update your weight entries to monitor your fitness journey and stay on track with your goals.</p>
+                <a href="/progresshub" class="btn btn-primary">Explore {{ progress_hub }} 👉</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

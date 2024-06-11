@@ -1,0 +1,159 @@
+{% extends "layout.html" %}
+
+{% block title %}
+{{ settings }}
+{% endblock %}
+
+{% block main %}
+<h1 class="mb-4 text-center"> {{ settings }}</h1>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6 mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control bg-light text-muted" id="username" name="username"
+                value="{{ user_data.username }}" readonly>
+        </div>
+    </div>
+    <form id="settings-form" action="/settings" method="post">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 mb-3">
+                <label for="unit_system" class="form-label">Unit System</label>
+                <select class="form-select" id="unit_system" name="unit_system" required onchange="changeUnits()">
+                    <option value="metric" {% if user_data.unit_system=='metric' %}selected{% endif %}>Metric (kg/cm)
+                    </option>
+                    <option value="imperial" {% if user_data.unit_system=='imperial' %}selected{% endif %}>Imperial
+                        (lb/ft/in)</option>
+                </select>
+            </div>
+        </div>
+        <div id="metric_fields" style="{% if user_data.unit_system == 'imperial' %}display:none;{% endif %}">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-6 mb-3">
+                    <label for="current_weight_kg" class="form-label">Weight (kg)</label>
+                    <input type="number" class="form-control" id="current_weight_kg" name="current_weight_kg"
+                        value="{{ user_data.current_weight_kg }}" step="0.1" required>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-6 mb-3">
+                    <label for="height_cm" class="form-label">Height (cm)</label>
+                    <input type="number" class="form-control" id="height_cm" name="height_cm"
+                        value="{{ user_data.height_cm }}" step="0.1" required>
+                </div>
+            </div>
+        </div>
+        <div id="imperial_fields" style="{% if user_data.unit_system == 'metric' %}display:none;{% endif %}">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-6 mb-3">
+                    <label for="current_weight_lb" class="form-label">Weight (lb)</label>
+                    <input type="number" class="form-control" id="current_weight_lb" name="current_weight_lb"
+                        value="{{ current_weight_lb | round(1) if current_weight_lb is not none else '' }}" step="0.1">
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-6 mb-3">
+                    <label for="height_ft" class="form-label">Height (ft/in)</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="height_ft" name="height_ft"
+                            value="{{ height_ft if height_ft is not none else '' }}" min="1" max="8">
+                        <input type="number" class="form-control" id="height_in" name="height_in"
+                            value="{{ height_in if height_in is not none else '' }}" min="0" max="11">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 mb-3">
+                <label for="birthday" class="form-label">Birthday</label>
+                <input type="date" class="form-control" id="birthday" name="birthday" value="{{ user_data.birthday }}"
+                    required>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 mb-3">
+                <label for="gender" class="form-label">Gender</label>
+                <select class="form-select" id="gender" name="gender" required>
+                    <option value="male" {% if user_data.gender=='male' %}selected{% endif %}>Male</option>
+                    <option value="female" {% if user_data.gender=='female' %}selected{% endif %}>Female</option>
+                </select>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 mb-3">
+                <label for="activity_level" class="form-label">Activity Level</label>
+                <select class="form-select" id="activity_level" name="activity_level" required>
+                    <option value="sedentary" {% if user_data.activity_level=='sedentary' %}selected{% endif %}>Little
+                        or no exercise</option>
+                    <option value="light" {% if user_data.activity_level=='light' %}selected{% endif %}>Exercise/sports
+                        1-3 days/week</option>
+                    <option value="moderate" {% if user_data.activity_level=='moderate' %}selected{% endif %}>
+                        Exercise/sports 3-5 days/week</option>
+                    <option value="active" {% if user_data.activity_level=='active' %}selected{% endif %}>
+                        Exercise/sports 6-7 days/week</option>
+                    <option value="very_active" {% if user_data.activity_level=='very_active' %}selected{% endif %}>
+                        Exercise/sports & physical job or 2x training/day</option>
+                </select>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 mb-3">
+                <label for="body_fat_percentage" class="form-label">Body Fat %</label>
+                <input type="number" class="form-control" id="body_fat_percentage" name="body_fat_percentage"
+                    value="{{ user_data.body_fat_percentage }}" placeholder="Optional" step="0.1">
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 mb-3">
+                <button type="submit" class="btn btn-primary">Update Settings</button>
+            </div>
+        </div>
+    </form>
+    <hr>
+
+    <h1 class="mb-4 text-center"> Change Password </h1>
+
+    <form id="change-password-form" action="/change_password" method="post">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 mb-3">
+                <label for="current_password" class="form-label">Current Password</label>
+                <input type="password" class="form-control" id="current_password" name="current_password" required>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 mb-3">
+                <label for="new_password" class="form-label">New Password</label>
+                <input type="password" class="form-control" id="new_password" name="new_password" required>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 mb-3">
+                <label for="confirm_password" class="form-label">Confirm New Password</label>
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 mb-3">
+                <button type="submit" class="btn btn-primary">Change Password</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    function changeUnits() {
+        const unitSystem = document.getElementById("unit_system").value;
+        const metricFields = document.getElementById("metric_fields");
+        const imperialFields = document.getElementById("imperial_fields");
+
+        if (unitSystem === "metric") {
+            metricFields.style.display = "block";
+            imperialFields.style.display = "none";
+        } else {
+            metricFields.style.display = "none";
+            imperialFields.style.display = "block";
+        }
+    }
+</script>
+
+{% endblock %}

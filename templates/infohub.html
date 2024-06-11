@@ -1,0 +1,163 @@
+<!--
+Bootstrap Classes Used:
+
+- container: Provides a responsive fixed-width container.
+- display-4: A larger, more prominent font size for headings.
+- text-center: Centers the text horizontally within the container.
+- lead: A larger, lighter text for introductory or lead text.
+- row: Creates a horizontal group of columns.
+- col-12: Spans all 12 columns of the grid on extra small to small screens (less than 768px).
+- col-md-12: Spans all 12 columns of the grid on medium to extra-large screens (768px and wider).
+- col-lg-4: Spans 4 columns of the grid on large to extra-large screens (992px and wider).
+- mb-4: Adds a bottom margin of 4 units.
+- card: A Bootstrap card component.
+- info-card: Custom class for additional card styling (needs to be defined in CSS).
+- card-body: Provides padding around the content inside the card.
+- text-center: Centers the text horizontally within the card body.
+- bi bi-1-circle-fill, bi bi-2-circle-fill, bi bi-3-circle-fill: Bootstrap icons for visual representation.
+- card-title: Styles the title within the card.
+- card-text: Styles the text within the card.
+- btn: Applies Bootstrap button styles.
+- btn-primary: Applies primary button styles (typically blue).
+- data-bs-toggle="modal": Enables the button to trigger a modal.
+- data-bs-target="#caloriesModal", data-bs-target="#weightLossModal", data-bs-target="#muscleModal": Specifies the id of the modal to trigger.
+- modal: Applies modal styles.
+- fade: Adds a fade effect to the modal.
+- modal-dialog: Container for the modal content.
+- modal-lg: Makes the modal larger.
+- modal-dialog-scrollable: Allows the modal body to be scrollable.
+- modal-content: Container for the modal header, body, and footer.
+- modal-header: Container for the modal title and close button.
+- modal-title: Styles the modal title.
+- btn-close: Applies styles to the modal close button.
+-->
+
+{% extends "layout.html" %}
+
+{% block title %}
+{{ info_hub }}
+{% endblock %}
+
+{% block main %}
+<div class="container">
+    <h2 class="display-4 text-center"><b>{{ info_hub }}</b></h2>
+    <p class="lead text-center">Uncover the essential principles to effortlessly achieve your fitness goals.</p>
+
+    <!-- Use .row to contain columns
+    basically leaves everything in 1 row if possible
+    1 row = 12 columns
+    so on phone / mid size devices it takes the entire space of the row
+    on large devices it takes 4 of these 12 columsn, resulting in
+    the 3 cards being horizontally next to each other
+    -->
+    <div class="row">
+        <!-- Calories Explained Card -->
+        <div class="col-12 col-md-12 col-lg-4 mb-4">
+            <div class="card info-card infohub-card">
+                <!-- Card body with text centered -->
+                <div class="card-body text-center">
+                    <!-- Bootstrap icon for visual representation -->
+                    <i class="bi bi-1-circle-fill"></i>
+                    <!-- Card title with bold text -->
+                    <h5 class="card-title"><b>Calorie Mastery</b><br>The Key To Getting Fit! </h5>
+                    <!-- Card description text -->
+                    <p class="card-text">Understand the basics of calories to effortlessly reach your fitness goals and
+                        maintain your ideal weight.</p>
+
+                    <!-- Button to trigger the modal with more information -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#caloriesModal">
+                        Learn More 👉 </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weight Management Card -->
+        <div class="col-12 col-md-12 col-lg-4 mb-4">
+            <div class="card info-card infohub-card">
+                <div class="card-body text-center">
+                    <i class="bi bi-2-circle-fill"></i>
+                    <h5 class="card-title"><b>Weight Management</b><br>Effective Strategies</h5>
+                    <p class="card-text">Learn sustainable techniques to manage your weight effectively, tailored to
+                        your lifestyle.</p>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#weightLossModal">
+                        Learn More 👉 </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Muscle Building Card -->
+        <div class="col-12 col-md-12 col-lg-4 mb-4">
+            <div class="card info-card infohub-card">
+                <div class="card-body text-center">
+                    <i class="bi bi-3-circle-fill"></i>
+                    <h5 class="card-title"><b>Muscle Building</b><br>Fundamental Tips</h5>
+                    <p class="card-text">Gain practical tips on building muscle through fundamental principles you
+                        can
+                        easily apply.</p>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#muscleModal">
+                        Learn More 👉 </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Calorie Mastery Modal -->
+    <div class="modal fade" id="caloriesModal" tabindex="-1" aria-labelledby="caloriesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="caloriesModalLabel" style="flex-grow: 1; text-align: center;">
+                        Calorie
+                        Mastery: The Key To Getting Fit!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% include 'modals/calorie_mastery_content.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Weight Loss  Modal -->
+    <div class="modal fade" id="weightLossModal" tabindex="-1" aria-labelledby="weightLossModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="weightLossModal" style="flex-grow: 1; text-align: center;">Weight
+                        Loss
+                        Secret Weight Loss Strategies</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% include 'modals/weight_loss_content.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Build Muscles  Modal -->
+    <div class="modal fade" id="muscleModal" tabindex="-1" aria-labelledby="muscleModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="muscleModal" style="flex-grow: 1; text-align: center;">Massive
+                        Muscles
+                        Arnold's Secrets</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% include 'modals/build_muscles_content.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

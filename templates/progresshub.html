@@ -1,0 +1,294 @@
+<!--
+Bootstrap Classes Used:
+1. container: Centers the content with a max width.
+2. row: Creates a horizontal group of columns.
+3. justify-content-center: Centers the content horizontally.
+4. col-12: Full-width column on all screen sizes.
+5. col-md-8: Column spanning 8 units on medium and larger screens.
+6. mt-3, mt-4, mb-3, mb-4, mb-5: Margin utilities for spacing.
+7. text-center: Centers the text horizontally.
+8. alert, alert-info: Styles alert boxes.
+9. form-label: Styles labels.
+10. form-control: Styles input fields.
+11. btn, btn-primary: Styles buttons.
+12. custom-alert, custom-form-width, custom-chart-width, custom-table-width: Custom CSS classes for additional styling.
+13. table, table-hover, table-sm, table-bordered: Styles tables.
+14. modal, modal-dialog, modal-content, modal-header, modal-body, modal-footer: Styles modal components.
+15. btn-close: Styles the close button in the modal.
+16. d-flex, justify-content-center: Flex utilities for alignment.
+17. btn-edit-delete: Custom button styles for edit and delete actions.
+18. chart-container: Custom class for chart styling.
+-->
+
+{% extends "layout.html" %}
+
+{% block title %}
+{{ progress_hub }}
+{% endblock %}
+
+{% block main %}
+<h1 class="mb-4 text-center"> {{ progress_hub }} </h1>
+
+<!-- Informational Message -->
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 mt-3">
+        <div class="alert alert-info text-center custom-alert" role="alert">
+            <i class="bi-info-circle"></i> <br>
+            <small>
+                Track your weight progress over time.<br>Update your weight weekly for the best results.
+            </small>
+        </div>
+    </div>
+</div>
+
+<!-- Form for submitting weight entries -->
+<form id="weight-form" class="mt-4 custom-form-width" method="POST" action="/progresshub">
+    <div class="row mb-3 justify-content-center">
+        <!-- Weight input field -->
+        <div class="col-4">
+            <label for="weight" class="form-label">Weight</label>
+            <input type="number" class="form-control" id="weight" name="weight" required step=0.1>
+        </div>
+        <!-- Unit display field (readonly) -->
+        <div class="col-4">
+            <label for="unit" class="form-label">Unit</label>
+            <input type="text" class="form-control" id="unit" name="unit"
+                value="{% if unit_system == 'metric' %}kg{% else %}lb{% endif %}" readonly>
+        </div>
+        <!-- Date input field -->
+        <div class="col-4">
+            <label for="date_recorded" class="form-label">Date</label>
+            <input type="date" class="form-control" id="date_recorded" name="date_recorded" value="{{ current_date }}">
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+<div class="row custom-chart-width">
+    <!-- Weight Progress Chart -->
+    <div class="col-12 mt-5">
+        <h2 class="mb-3 text-center">Weight Progress Over Time</h2>
+        <div class="chart-container" style="position: relative; height: 100%; width: 100%;">
+            <canvas id="weightProgressChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Creating the table with the weight entries. -->
+<div class="mt-5 custom-table-width">
+    <h2 class="mb-3">Your Weight Entries</h2>
+    <table class="table table-hover table-sm table-bordered text-center">
+        <thead class="table-primary">
+            <tr>
+                <th>Date</th>
+                <th>Weight</th>
+                <th>Unit</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in entries %}
+            <tr>
+                <td>{{ entry.date_recorded }}</td>
+                <td>{{ entry.weight }}</td>
+                <td>{{ entry.unit }}</td>
+                <td>
+                    <button type="button" class="btn-edit-delete" data-bs-toggle="modal" data-bs-target="#editModal"
+                        data-id="{{ entry.id }}" data-weight="{{ entry.weight }}" data-date="{{ entry.date_recorded }}">
+                        Edit
+                    </button>
+                    <br>
+                    <form action="{{ url_for('delete_entry', entry_id=entry.id) }}" method="post"
+                        style="display:inline;">
+                        <button type="submit" class="btn-edit-delete">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel" style="flex-grow: 1; text-align: center;">Edit Weight Entry
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="edit-date" class="form-label">Date You Are Editing</label>
+                    <input type="date" class="form-control" id="edit-date" readonly>
+                </div>
+                <form id="edit-form" method="post">
+                    <div class="mb-3">
+                        <label for="edit-weight" class="form-label">Weight</label>
+                        <input type="number" class="form-control" id="edit-weight" name="weight" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="submit" class="btn mb-3" onclick="submitEditForm()">Save changes</button>
+                <button type="button" class="btn mb-3" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    /* Chart-related JS */
+    // Prepare data for the chart by extracting date and weight from weightEntries
+    const weightEntries = {{ entries| tojson }};
+    const labels = weightEntries.map(entry => entry.date_recorded);
+    const weights = weightEntries.map(entry => entry.weight);
+
+    // Debugging: Log the data to console for verification
+    console.log('Weight Entries:', weightEntries);
+    console.log('Labels:', labels);
+    console.log('Weights:', weights);
+
+    // Create the chart using Chart.js library
+    const ctx = document.getElementById('weightProgressChart').getContext('2d');
+    const weightProgressChart = new Chart(ctx, {
+        type: 'line', // Define chart type
+        data: {
+            labels: labels, // Set the labels for the x-axis
+            datasets: [{
+                label: 'Weight', // Label for the dataset
+                data: weights, // Data points for the chart
+                borderColor: 'rgba(75, 192, 192, 1)', // Line color
+                backgroundColor: 'rgba(75, 192, 192, 0.2)', // Background color under the line
+                fill: false, // Disable fill under the line
+                tension: 0.1 // Set line tension for smoothness
+            }]
+        },
+        options: {
+            responsive: true, // Make the chart responsive
+            scales: {
+                x: {
+                    type: 'time', // Define x-axis as time scale
+                    time: {
+                        unit: 'day', // Set time unit to day
+                        tooltipFormat: 'MMM DD, YYYY' // Tooltip date format
+                    },
+                    title: {
+                        display: true, // Display x-axis title
+                        text: 'Date' // Text for x-axis title
+                    }
+                },
+                y: {
+                    title: {
+                        display: true, // Display y-axis title
+                        text: 'Weight' // Text for y-axis title
+                    }
+                }
+            }
+        }
+    });
+
+    /* Modal-related JS */
+    // Get the edit modal element
+    var editModal = document.getElementById('editModal');
+    editModal.addEventListener('show.bs.modal', function(event) {
+        var button = event.relatedTarget; // Button that triggered the modal
+        var id = button.getAttribute('data-id'); // Extract info from data-* attributes
+        var weight = button.getAttribute('data-weight');
+        var date = button.getAttribute('data-date');
+
+        // Update the modal's input fields with the extracted data
+        var modalBodyInputWeight = editModal.querySelector('.modal-body input#edit-weight');
+        var modalBodyInputDate = editModal.querySelector('.modal-body input#edit-date');
+
+        modalBodyInputWeight.value = weight;
+        modalBodyInputDate.value = date;
+
+        // Update the form action with the entry id
+        var form = document.getElementById('edit-form');
+        form.action = '/edit_entry/' + id;
+    });
+
+
+    // Function to submit the edit form via fetch API
+    function submitEditForm() {
+        // Retrieve the date and weight values from the edit modal
+        var date = document.getElementById('edit-date').value;
+        var weight = document.getElementById('edit-weight').value;
+
+        // Get the form element and create a FormData object from it
+        var form = document.getElementById('edit-form');
+        var formData = new FormData(form);
+        // Append the date to the FormData object
+        formData.append('date_recorded', date);
+
+        // Send the form data via a POST request using the fetch API
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            if (response.ok) {
+                // If the response is OK, parse the JSON data
+                return response.json();
+            } else {
+                // If the response is not OK, parse the error data and throw an error
+                return response.json().then(errorData => {
+                    throw new Error(errorData.error);
+                });
+            }
+        }).then(data => {
+            /* Storing the flash message in local storage was the only way to actually show it after the page loads in this case
+                otherwise it just would not show at all. */
+            // Store the success message in localStorage
+            localStorage.setItem('flashMessage', JSON.stringify({ category: 'primary', message: data.message }));
+            // Reload the page to show the updated data
+            location.reload();
+        }).catch(error => {
+            // Store the error message in localStorage
+            localStorage.setItem('flashMessage', JSON.stringify({ category: 'primary', message: error.message }));
+            // Reload the page to show the flash message
+            location.reload();
+        });
+    }
+
+    // Function to display a flash message
+    function showFlashMessage(category, message) {
+        // Create a new div element for the flash message
+        var flashContainer = document.createElement('div');
+        // Assign Bootstrap alert classes for styling
+        flashContainer.className = `alert alert-${category} text-center`;
+        flashContainer.role = 'alert';
+        // Set the inner HTML to the provided message
+        flashContainer.innerHTML = message;
+
+        // Insert the flash message at the top of the main container
+        var mainContainer = document.querySelector('.container');
+        mainContainer.insertBefore(flashContainer, mainContainer.firstChild);
+
+        // Automatically remove the flash message after a few seconds
+        // This part is currently commented out, but you can uncomment it to enable automatic removal
+        // setTimeout(() => {
+        //     flashContainer.remove();
+        // }, 5000);
+    }
+
+    // Check if there is a flash message in localStorage and display it
+    document.addEventListener('DOMContentLoaded', function() {
+        // Retrieve the flash message from localStorage
+        const flashMessage = JSON.parse(localStorage.getItem('flashMessage'));
+        if (flashMessage) {
+            // Display the flash message
+            showFlashMessage(flashMessage.category, flashMessage.message);
+            // Clear the flash message from localStorage to prevent repeated display
+            localStorage.removeItem('flashMessage');
+        }
+    });
+
+
+
+</script>
+
+{% endblock %}

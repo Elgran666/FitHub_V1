@@ -1,0 +1,389 @@
+<!--
+Bootstrap classes:
+min-vh-100:  Ensures that the container is at least 100% of the viewport height, making it cover the entire screen vertically.
+d-flex: Applies the CSS Flexbox layout to the container, enabling flexible and responsive layout designs.
+ -> min-vh-100 + d-flex need to be applied together
+justify-content-center: Horizontally centers the content within the container in a flex layout.
+w-100: Sets the width of the element to 100% of its parent element, ensuring it takes up the full width available.
+col-md-6: On medium devices and up, this class restricts the element to span 6 out of the 12 available columns, effectively making it half-width on larger screens.
+pb: padding bottom
+mb: margin bottom
+
+data-bs-toggle="modal": Specifies that the button will toggle a modal.
+data-bs-target="#signIn": Points to the modal with the ID signIn that will be toggled (opened) when the button is clicked.
+
+modal fade: This class combination is used for modal components to animate the transition effects and style the modal.
+btn-close: Styles the close button of the modal to match Bootstrap’s default button appearance.
+modal-dialog-centered: Vertically centers the modal on the page.
+modal-content: Wraps the actual content of the modal, including header, body, and footer sections.
+modal-body: Container for the main content of the modal, such as text inputs, forms, or any other information.
+form-label: Used for labeling form elements, providing accessibility benefits and visual identification of form fields.
+form-control: This class styles the form elements like input fields to adhere to Bootstrap’s form styles.
+
+
+
+
+labelledby + aria-hidden: part of the Web Accessibility Initiative - Accessible Rich Internet Applications (WAI-ARIA or ARIA) standards. These attributes help enhance the accessibility of web pages, particularly for users who rely on assistive technologies like screen readers. Here's what each attribute does
+
+
+tabindex="-1" = allows an element to be programmatically focused (using JavaScript, for example) but removes it from the normal tabbing order. This means you can't reach this element by pressing the Tab key, which can be useful for elements that should not be interacted with until triggered by some other UI action.
+
+class="form-control" = makes it a visually pleasing bootstrap form
+
+ -->
+
+{% extends "layout.html" %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block main %}
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="row">
+        <div class="col-12 col-md-6 d-flex align-items-center justify-content-center mb-5">
+            <!--
+            img-fluid: Makes the image responsive (scales with the parent element).
+            custom-logo-size: Custom class presumably for additional styling/sizing.
+            -->
+            <img src="/static/fithub_logo_transparent_500x200.png" alt="FitHub Logo" class="img-fluid custom-logo-size">
+        </div>
+        <div class="col-12 col-md-6">
+            <h1 class="mb-2">Get Fit Now!</h1>
+            <p class="text-muted mb-4">Join Today.</p>
+            <!--
+            data-bs-toggle="modal": Enables the button to trigger a modal.
+            data-bs-target="#createAccount": Specifies the id of the modal to trigger.
+            -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createAccount">
+                Create account
+            </button>
+            <!-- text-muted makes text "grey"-ish -->
+            <p class="text-muted mt-4">Already have an account?</p>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signIn">
+                Sign in
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="createAccount" tabindex="-1" aria-labelledby="createAccountLabel" aria-hidden="true">
+    <!-- modal-dialog-centered ensures that the modal window is centered on the screen -->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- flex-grow: 1 makes the title element take up all available space, centering the text -->
+                <h5 class="modal-title" style="flex-grow: 1; text-align: center;">Create your FitHub account</h5>
+                <!-- btn-close with position: absolute places the close button at the right -->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    style="position: absolute; right: 1rem;"></button>
+            </div>
+            <div class="modal-body">
+                <form id="signup-form" action="/signup" method="post">
+                    <div id="step-1">
+                        <div class="mb-3">
+                            <label for="createAccountUsername" class="form-label">Username</label>
+                            <!-- autocomplete="off" prevents the browser from suggesting previously entered usernames -->
+                            <input autocomplete="off" type="text" class="form-control" id="createAccountUsername"
+                                name="createAccountUsername" required>
+                            <div id="error_message_username" class="text-danger"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="createAccountPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="createAccountPassword"
+                                name="createAccountPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="createAccountConfirmPassword" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="createAccountConfirmPassword"
+                                name="createAccountConfirmPassword" required>
+                            <div id="error_message_step1" class="text-danger"></div>
+                        </div>
+                        <!-- onclick="validateStep1()" calls a JavaScript function to validate the first step -->
+                        <button type="button" class="btn btn-primary" onclick="validateStep1()">Next 👉</button>
+                    </div>
+                    <div id="step-2" style="display:none;">
+                        <div class="mb-3">
+                            <label for="birthday" class="form-label">Birthday</label>
+                            <input type="date" class="form-control" id="birthday" name="birthday" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="gender" class="form-label">Gender</label>
+                            <select class="form-select" id="gender" name="gender" required>
+                                <option value="" selected disabled>Select your gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="activity_level" class="form-label">Activity Level</label>
+                            <select class="form-select" id="activity_level" name="activity_level" required>
+                                <option value="" selected disabled>Select your activity level</option>
+                                <option value="sedentary">Little or no exercise (Sedentary)</option>
+                                <option value="light">Exercise/sports 1-3 days/week (Light)</option>
+                                <option value="moderate">Exercise/sports 3-5 days/week (Moderate)</option>
+                                <option value="active">Exercise/sports 6-7 days/week (Active)</option>
+                                <option value="very_active">Exercise/sports & physical job or 2x training/day (Very
+                                    Active)</option>
+                            </select>
+                            <div id="error_message_step2" class="text-danger"></div>
+                        </div>
+                        <!-- onclick="prevStep()" calls a JavaScript function to go back to the previous step -->
+                        <button type="button" class="btn btn-primary mb-3" onclick="prevStep()">👈 Back</button>
+                        <br>
+                        <!-- onclick="validateStep2()" calls a JavaScript function to validate the second step -->
+                        <button type="button" class="btn btn-primary" onclick="validateStep2()">Next 👉</button>
+                    </div>
+                    <div id="step-3" style="display:none;">
+                        <div class="mb-3">
+                            <label for="unit_system" class="form-label">Unit System</label>
+                            <!-- onchange="changeUnits()" calls a JavaScript function to handle unit system changes -->
+                            <select class="form-select" id="unit_system" name="unit_system" required
+                                onchange="changeUnits()">
+                                <option value="metric" selected>Metric (kg/cm)</option>
+                                <option value="imperial">Imperial (lb/ft/in)</option>
+                            </select>
+                        </div>
+                        <div id="weight_metric" class="mb-3">
+                            <label for="current_weight_kg" class="form-label">Weight (kg)</label>
+                            <!-- step="0.1" allows input with one decimal place -->
+                            <input type="number" class="form-control" id="current_weight_kg" name="current_weight_kg"
+                                required step="0.1">
+                        </div>
+                        <div id="weight_imperial" class="mb-3" style="display: none;">
+                            <label for="current_weight_lb" class="form-label">Weight (lb)</label>
+                            <input type="number" class="form-control" id="current_weight_lb" name="current_weight_lb"
+                                step="0.1">
+                        </div>
+                        <div id="height_metric" class="mb-3">
+                            <label for="height_cm" class="form-label">Height (cm)</label>
+                            <input type="number" class="form-control" id="height_cm" name="height_cm" required>
+                        </div>
+                        <div id="height_imperial" class="mb-3" style="display: none;">
+                            <label for="height_ft" class="form-label">Height</label>
+                            <!-- .input-group groups multiple form controls into one line -->
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="height_ft" name="height_ft"
+                                    placeholder="ft" min="1" max="8">
+                                <input type="number" class="form-control" id="height_in" name="height_in"
+                                    placeholder="in" min="0" max="11">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="body_fat_percentage" class="form-label">Body Fat %</label>
+                            <!-- step="0.1" allows input with one decimal place, placeholder="Optional" indicates the field is not mandatory -->
+                            <input type="number" class="form-control" id="body_fat_percentage"
+                                name="body_fat_percentage" placeholder="Optional" step="0.1">
+                            <div id="error_message_step3" class="text-danger"></div>
+                        </div>
+                        <button type="button" class="btn btn-primary mb-3" onclick="prevStep()">👈 Back</button>
+                        <br>
+                        <!-- onclick="validateStep3()" calls a JavaScript function to validate the third step -->
+                        <button type="button" class="btn btn-primary" onclick="validateStep3()">Create account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="signIn" tabindex="-1" aria-labelledby="signInLabel" aria-hidden="true">
+    <!-- modal-dialog-centered ensures that the modal window is centered on the screen -->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- Modal title with centered text and flex-grow to take up available space -->
+                <h5 class="modal-title" style="flex-grow: 1; text-align: center;">Sign in to FitHub</h5>
+                <!-- Close button positioned absolutely to the right -->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    style="position: absolute; right: 1rem;"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Form for login with POST method -->
+                <form action="/login" method="post">
+                    <div class="mb-3">
+                        <!-- Label for the username input -->
+                        <label for="signInUsername" class="form-label">Username</label>
+                        <!-- Username input field with autocomplete off to prevent browser from suggesting previously entered usernames -->
+                        <input autocomplete="off" type="text" class="form-control" id="signInUsername"
+                            name="signInUsername" required>
+                    </div>
+                    <div class="mb-3">
+                        <!-- Label for the password input -->
+                        <label for="signInPassword" class="form-label">Password</label>
+                        <!-- Password input field -->
+                        <input type="password" class="form-control" id="signInPassword" name="signInPassword" required>
+                    </div>
+                    <!-- Submit button for the form -->
+                    <button type="submit" class="btn btn-primary">Sign in</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentStep = 1;
+
+    // Function to move to the next step in the form
+    function nextStep() {
+        document.getElementById('step-' + currentStep).style.display = 'none';
+        currentStep++;
+        document.getElementById('step-' + currentStep).style.display = 'block';
+    }
+
+    // Function to move to the previous step in the form
+    function prevStep() {
+        document.getElementById('step-' + currentStep).style.display = 'none';
+        currentStep--;
+        document.getElementById('step-' + currentStep).style.display = 'block';
+    }
+
+    // Function to change the unit system and show/hide appropriate fields
+    function changeUnits() {
+        const unitSystem = document.getElementById("unit_system").value;
+        const heightMetric = document.getElementById("height_metric");
+        const heightImperial = document.getElementById("height_imperial");
+        const weightMetric = document.getElementById("weight_metric");
+        const weightImperial = document.getElementById("weight_imperial");
+
+        if (unitSystem === "metric") {
+            heightMetric.style.display = "block";
+            weightMetric.style.display = "block";
+            heightImperial.style.display = "none";
+            weightImperial.style.display = "none";
+        } else {
+            heightMetric.style.display = "none";
+            weightMetric.style.display = "none";
+            heightImperial.style.display = "block";
+            weightImperial.style.display = "block";
+        }
+    }
+
+    // Function to validate the first step
+    function validateStep1() {
+        const username = document.getElementById("createAccountUsername").value;
+        const password = document.getElementById("createAccountPassword").value;
+        const confirmPassword = document.getElementById("createAccountConfirmPassword").value;
+
+        if (!username || !password || !confirmPassword) {
+            document.getElementById("error_message_step1").innerText = "All fields are required.";
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            document.getElementById("error_message_step1").innerText = "Passwords do not match.";
+            return;
+        }
+
+        // Check if the username already exists
+        fetch("/check_username", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `username=${username}`,
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) {
+                    document.getElementById("error_message_step1").innerText = "Username already exists.";
+                } else {
+                    document.getElementById("error_message_step1").innerText = "";
+                    nextStep();
+                }
+            });
+    }
+
+    // Function to validate the second step
+    function validateStep2() {
+        const birthday = document.getElementById("birthday").value;
+        const gender = document.getElementById("gender").value;
+        const activity_level = document.getElementById("activity_level").value;
+
+        if (!birthday || !gender || !activity_level) {
+            document.getElementById("error_message_step2").innerText = "All fields are required.";
+            return;
+        }
+
+        // Get the current date and calculate the age
+        const today = new Date();
+        const birthDate = new Date(birthday);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        const dayDiff = today.getDate() - birthDate.getDate();
+
+        // Adjust age if the birthday hasn't occurred yet this year
+        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+            age--;
+        }
+
+        // Validate that the user is at least 14 years old
+        if (age < 14) {
+            document.getElementById("error_message_step2").innerText = "You must be at least 14 years old to sign up.";
+            return;
+        }
+
+        // Validate that the user is not more than 100 years old
+        if (age > 100) {
+            document.getElementById("error_message_step2").innerText = "You can't be more than 100 years old to sign up.";
+            return;
+        }
+
+        document.getElementById("error_message_step2").innerText = "";
+        nextStep();
+    }
+
+    // Function to validate the third step
+    function validateStep3() {
+        const unit_system = document.getElementById("unit_system").value;
+        const current_weight_kg = parseFloat(document.getElementById("current_weight_kg").value);
+        const current_weight_lb = parseFloat(document.getElementById("current_weight_lb").value);
+        const height_cm = parseFloat(document.getElementById("height_cm").value);
+        const height_ft = parseInt(document.getElementById("height_ft").value);
+        const height_in = parseInt(document.getElementById("height_in").value);
+
+        // Clear any previous errors
+        document.getElementById("error_message_step3").innerText = "";
+
+        // Validate metric system inputs
+        if (unit_system === 'metric') {
+            if (!current_weight_kg || !height_cm) {
+                document.getElementById("error_message_step3").innerText = "All fields are required.";
+                return false;
+            }
+            if (current_weight_kg < 30 || current_weight_kg > 200) {
+                document.getElementById("error_message_step3").innerText = "Weight must be between 30 kg and 200 kg.";
+                return false;
+            }
+            if (height_cm < 100 || height_cm > 250) {
+                document.getElementById("error_message_step3").innerText = "Height must be between 100 cm and 250 cm.";
+                return false;
+            }
+            // Validate imperial system inputs
+        } else if (unit_system === 'imperial') {
+            // Validate height_ft to be non-zero, height_in to allow zero value as someone could be 6ft 0 inches for example
+            if (!current_weight_lb || !height_ft || (!height_in && height_in !== 0)) {
+                document.getElementById("error_message_step3").innerText = "All fields are required.";
+                return false;
+            }
+            if (current_weight_lb < 65 || current_weight_lb > 440) { // Roughly equivalent to 30 kg to 200 kg
+                document.getElementById("error_message_step3").innerText = "Weight must be between 65 lb and 440 lb.";
+                return false;
+            }
+            const totalHeightInInches = height_ft * 12 + height_in;
+            if (totalHeightInInches < 39 || totalHeightInInches > 98) { // Roughly 100 cm to 250 cm
+                document.getElementById("error_message_step3").innerText = "Height must be between 3 ft 3 in and 8 ft 2 in.";
+                return false;
+            }
+        }
+
+        // If all validations pass, submit the form
+        document.getElementById("signup-form").submit();
+    }
+</script>
+
+
+{% endblock %}
